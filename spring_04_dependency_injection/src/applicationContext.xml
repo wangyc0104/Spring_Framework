@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- bean的属性注入 -->
+	<bean id="people" class="wyc.pojo.People">
+		<!-- 基本属性注入 -->
+		<property name="id">
+			<value>456</value>
+		</property>
+		<!-- 字符串属性注入 -->
+		<property name="name">
+			<value>zhangsan</value>
+		</property>
+		<!-- 集合属性注入之set -->
+		<property name="sets">
+			<set>
+				<value>1</value>
+				<value>2</value>
+				<value>3</value>
+				<value>4</value>
+			</set>
+		</property>
+		<!-- 集合属性注入之list（如果list属性中只有一个值，则可以像下面这么写） -->
+		<property name="list" value="1"></property>
+		<!-- 集合属性注入之数组 -->
+		<property name="strs">
+			<array>
+				<value>1</value>
+				<value>2</value>
+				<value>3</value>
+			</array>
+		</property>
+		<!-- 集合属性注入之map -->
+		<property name="map">
+			<map>
+				<entry key="a" value="b">
+				</entry>
+				<entry key="c" value="d">
+				</entry>
+			</map>
+		</property>
+		<!-- Properties对象属性注入(无序) -->
+		<property name="properties">
+			<props>
+				<prop key="key1">value1</prop>
+				<prop key="key2">value2</prop>
+			</props>
+		</property>
+		<!-- 对象依赖注入 -->
+		<property name="desk" ref="desk"></property>
+	</bean>
+
+	<!-- bean的属性注入 -->
+	<bean id="desk" class="wyc.pojo.Desk">
+		<property name="id" value="1"></property>
+		<property name="price" value="12"></property>
+	</bean>
+	
+</beans>

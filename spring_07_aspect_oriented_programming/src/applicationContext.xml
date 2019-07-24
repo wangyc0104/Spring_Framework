@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+    
+    <!--=======================>
+    	使用AspectJ进行切面编程
+    <========================-->    
+        
+    <!-- 切点bean -->
+    <bean id="demo" class="wyc.test.Demo"></bean>
+    
+    <!-- advice bean -->
+    <bean id="myadvice" class="wyc.advice.MyAdvice"></bean>
+    
+    <!-- 实现AOP -->
+    <aop:config>
+    	<!-- 配置advice bean -->
+		<aop:aspect ref="myadvice">
+			<!-- 切面表达式：execution(返回值类型 类的全限定名.方法名(参数类型)) and args(参数名字) -->
+			<aop:pointcut expression="execution(* wyc.test.Demo.demo(..))" id="mypoint" />
+			<aop:pointcut expression="execution(* wyc.test.Demo.demo(String)) and args(name)" id="mypoint1" />
+			<aop:pointcut expression="execution(* wyc.test.Demo.demo(String,int)) and args(name,age)" id="mypoint2" />
+			<!-- 配置advice bean需要在哪些切点中实现哪些切面方法（参数名需一致，不然易出错） -->
+			<aop:before method="mybefore1" pointcut-ref="mypoint1" arg-names="name" />
+			<aop:before method="mybefore" pointcut-ref="mypoint2" arg-names="name,age" />
+			<aop:after method="myafter" pointcut-ref="mypoint2" arg-names="name,age" />
+			<aop:after-returning method="myaftering" pointcut-ref="mypoint2" arg-names="name,age" />
+			<aop:after-throwing method="mythrow" pointcut-ref="mypoint2" arg-names="name,age" />
+			<aop:around method="myarround" pointcut-ref="mypoint" />
+		</aop:aspect>
+	</aop:config>
+	
+</beans>

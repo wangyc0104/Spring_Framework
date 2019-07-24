@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    <!--=========================================>
+    	依赖关系：
+	    	service		依赖		mapper
+	    	mapper		依赖		factory
+	    	factory		依赖		dataSource
+    <==========================================-->
+    
+    <!--数据源封装类对象
+		数据源：获取数据库连接（spring-jdbc.jar） -->
+    <bean id="dataSouce" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    	<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+    	<property name="url" value="jdbc:mysql://localhost:3306/ssm"></property>
+    	<property name="username" value="root"></property>
+    	<property name="password" value="123456"></property>
+    </bean>
+    
+    <!--创建SqlSessionFactory对象 -->
+    <bean id="factory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    	<!-- 数据库连接信息来源于dataSource -->
+    	<property name="dataSource" ref="dataSouce"></property>
+    </bean>
+    
+    <!--扫描器相当于mybatis.xml中 mappers下package标签
+		扫描wyc.mapper包后会给对应接口创建对象 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    	<!-- 要扫描的包命名空间 -->
+    	<property name="basePackage" value="wyc.mapper"></property>
+    	<!-- 依赖的factory -->
+    	<property name="sqlSessionFactory" ref="factory"></property>
+    </bean>
+    
+    <!--由spring容器管理service实现类 -->
+    <bean id="airportService" class="wyc.service.impl.AirportServiceImpl">
+    	<property name="airportMapper" ref="airportMapper"></property>
+    </bean>
+    
+</beans>
