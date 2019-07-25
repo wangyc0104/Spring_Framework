@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:aop="http://www.springframework.org/schema/aop"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop.xsd">
-       
-    <!-- 数据源 -->
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+    <!-- 获取数据源 -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
     	<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
     	<property name="url" value="jdbc:mysql://localhost:3306/ssm"></property>
@@ -15,31 +12,20 @@
     	<property name="password" value="123456"></property>
     </bean>
     
-    <!-- SqlSessinFactory对象 -->
+    <!-- spring帮助创建SqlSessionFactory -->
     <bean id="factory" class="org.mybatis.spring.SqlSessionFactoryBean">
     	<property name="dataSource" ref="dataSource"></property>
-    	<property name="typeAliasesPackage" value="wyc.pojo"></property>
     </bean>
     
-    <!-- 扫描器 -->
+    <!--  扫描器,扫描接口,并创建接口对象-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
     	<property name="basePackage" value="wyc.mapper"></property>
     	<property name="sqlSessionFactory" ref="factory"></property>
     </bean>
     
-    <!-- 注入 -->
+    <!-- 创建Service -->
     <bean id="usersService" class="wyc.service.impl.UsersServiceImpl">
     	<property name="usersMapper" ref="usersMapper"></property>
     </bean>
-    
-    <!-- CGLIB方式实现AOP -->
-    <aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>
-    <bean id="mybefore" class="wyc.advice.MyBefore"></bean>
-    <bean id="myafter" class="wyc.advice.MyAfter"></bean>
-    <aop:config>
-    	<aop:pointcut expression="execution(* wyc.service.impl.UsersServiceImpl.login(..))" id="mypoint"/>
-    	<aop:advisor advice-ref="mybefore" pointcut-ref="mypoint"/>
-    	<aop:advisor advice-ref="myafter" pointcut-ref="mypoint"/>
-    </aop:config>
     
 </beans>
